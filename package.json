@@ -1,0 +1,52 @@
+{
+  "name": "@seneca/gateway",
+  "version": "0.4.0",
+  "main": "dist/gateway.js",
+  "type": "commonjs",
+  "types": "dist/gateway.d.ts",
+  "description": "Handle incoming messages within other frameworks.",
+  "homepage": "https://github.com/senecajs/seneca-gateway",
+  "keywords": [
+    "seneca",
+    "gateway"
+  ],
+  "author": "Richard Rodger - richardrodger.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/senecajs/seneca-gateway.git"
+  },
+  "scripts": {
+    "test": "jest --coverage",
+    "test-some": "jest -t",
+    "test-watch": "jest --coverage --watchAll",
+    "watch": "tsc -w -d",
+    "build": "tsc -d",
+    "clean": "rm -rf node_modules yarn.lock package-lock.json",
+    "reset": "npm run clean && npm i && npm test",
+    "repo-tag": "REPO_VERSION=`node -e \"console.log(require('./package').version)\"` && echo TAG: v$REPO_VERSION && git commit -a -m v$REPO_VERSION && git push && git tag v$REPO_VERSION && git push --tags;",
+    "repo-publish": "npm run clean && npm i && npm run repo-publish-quick",
+    "repo-publish-quick": "npm run build && npm run test && npm run repo-tag && npm publish --access public --registry https://registry.npmjs.org "
+  },
+  "license": "MIT",
+  "files": [
+    "dist",
+    "src/**/*.ts",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "devDependencies": {
+    "@seneca/maintain": "^0.0.22",
+    "@types/jest": "^27.5.1",
+    "esbuild": "^0.14.39",
+    "esbuild-jest": "^0.5.0",
+    "jest": "^28.1.0",
+    "seneca-msg-test": "^3.4.0",
+    "typescript": "^4.6.4"
+  },
+  "peerDependencies": {
+    "seneca": ">=3",
+    "seneca-promisify": ">=2"
+  }
+}
