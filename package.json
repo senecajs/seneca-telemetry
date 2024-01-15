@@ -1,19 +1,19 @@
 {
-  "name": "@seneca/gateway",
-  "version": "0.4.0",
-  "main": "dist/gateway.js",
+  "name": "@seneca/telemetry",
+  "version": "0.1.0",
+  "main": "dist/telemetry.js",
   "type": "commonjs",
-  "types": "dist/gateway.d.ts",
+  "types": "dist/telemetry.d.ts",
   "description": "Handle incoming messages within other frameworks.",
-  "homepage": "https://github.com/senecajs/seneca-gateway",
+  "homepage": "https://github.com/senecajs/seneca-telemetry",
   "keywords": [
     "seneca",
-    "gateway"
+    "telemetry"
   ],
   "author": "Richard Rodger - richardrodger.com",
   "repository": {
     "type": "git",
-    "url": "git://github.com/senecajs/seneca-gateway.git"
+    "url": "git://github.com/senecajs/seneca-telemetry.git"
   },
   "scripts": {
     "test": "jest --coverage",
@@ -34,16 +34,16 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   },
   "devDependencies": {
-    "@seneca/maintain": "^0.0.22",
-    "@types/jest": "^27.5.1",
-    "esbuild": "^0.14.39",
+    "@seneca/maintain": "^0.1.0",
+    "@types/jest": "^29.5.11",
+    "esbuild": "^0.19.11",
     "esbuild-jest": "^0.5.0",
-    "jest": "^28.1.0",
-    "seneca-msg-test": "^3.4.0",
-    "typescript": "^4.6.4"
+    "jest": "^29.7.0",
+    "seneca-msg-test": "^4.1.0",
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "seneca": ">=3",
