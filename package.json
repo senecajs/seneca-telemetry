@@ -1,6 +1,6 @@
 {
   "name": "@seneca/telemetry",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "main": "dist/telemetry.js",
   "type": "commonjs",
   "types": "dist/telemetry.d.ts",
