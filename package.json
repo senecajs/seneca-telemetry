@@ -1,6 +1,6 @@
 {
   "name": "@seneca/telemetry",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/telemetry.js",
   "type": "commonjs",
   "types": "dist/telemetry.d.ts",
@@ -47,6 +47,9 @@
   },
   "peerDependencies": {
     "seneca": ">=3",
-    "seneca-promisify": ">=2"
+    "seneca-promisify": ">=3"
+  },
+  "dependencies": {
+    "fast-stats": "^0.0.6"
   }
 }
