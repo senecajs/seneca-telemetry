@@ -3,7 +3,7 @@ type Options = {
     active: boolean;
 };
 export type TelemetryOptions = Partial<Options>;
-declare function Telemetry(this: any, options: Options): {
+declare function Telemetry(this: any, _options: Options): {
     exports: {
         raw: () => any;
     };

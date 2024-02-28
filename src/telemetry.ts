@@ -3,7 +3,10 @@
 
 const { Stats } = require('fast-stats')
 
-import { Open } from 'gubu'
+// import { Open } from 'gubu'
+
+
+// TODO: separate out errored messages
 
 
 type Options = {
@@ -22,14 +25,13 @@ export type TelemetryOptions = Partial<Options>
 
 
 
-
 function preload(this: any, plugin: any) {
   const seneca = this
   const root = seneca.root
   const options: Options = plugin.options
 
 
-  const tdata = root.context._sys_Telemetry ??= {
+  const tdata = root.context.$_sys_Telemetry ??= {
     active: options.active,
     msg: {},
     trace: {},
@@ -54,8 +56,8 @@ function preload(this: any, plugin: any) {
       msgm.c.push(when)
       let index = msgm.c.length - 1
       msgm.m[index] = meta.mi
-      meta.custom._sys_Telemetry_index ??= {}
-      meta.custom._sys_Telemetry_index[meta.mi] = index
+      meta.custom.$_sys_Telemetry_index ??= {}
+      meta.custom.$_sys_Telemetry_index[meta.mi] = index
 
       const tracem = (tdata.trace[meta.tx] ??= [])
 
@@ -82,7 +84,8 @@ function preload(this: any, plugin: any) {
       const act = actdef.id
 
       const msgm = tdata.msg[pat]?.[act]
-      const index = meta.custom?._sys_Telemetry_index[meta.mi]
+      const sys_Telemetry_index = meta.custom?.$_sys_Telemetry_index
+      const index = sys_Telemetry_index ? sys_Telemetry_index[meta.mi] : null
       if (msgm && null != index) {
         msgm.d[index] = Date.now() - msgm.c[index]
       }
@@ -97,17 +100,17 @@ function preload(this: any, plugin: any) {
 }
 
 
-function Telemetry(this: any, options: Options) {
+function Telemetry(this: any, _options: Options) {
   let seneca: any = this
   const root: any = seneca.root
 
-  const tdata = root.context._sys_Telemetry
+  const tdata = root.context.$_sys_Telemetry
 
   seneca
     .fix('sys:telemetry')
 
     .message('set:active', { active: Boolean }, async function setActive(msg: any) {
-      const tdata = root.context._sys_Telemetry
+      const tdata = root.context.$_sys_Telemetry
       tdata.active = msg.active
     })
 

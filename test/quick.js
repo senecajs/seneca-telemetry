@@ -39,6 +39,13 @@ async function run() {
           return this.prior(msg)
 	})
 
+      	.message('d:1', async function d1(msg) {
+          if(0===msg.x) throw new Error('BAD')
+          await new Promise(r=>setTimeout(r,100*msg.x))
+          return {x:100+msg.x}
+	})
+
+  
 	.ready()
 
   for(let i = 0; i < 1; i++) {
@@ -56,6 +63,13 @@ async function run() {
   console.dir(await seneca.post('sys:telemetry,get:msg',{pat:'b:1'}),{depth:null,breakLength:120})
   console.dir(await seneca.post('sys:telemetry,get:msg',{pat:'c:1'}),{depth:null,breakLength:120})
   // console.dir(seneca.export('Telemetry/raw')(), {depth:null})
+
+
+  seneca.act('d:1',{x:1}, seneca.util.print)
+  seneca.act('d:1',{x:2}, seneca.util.print)
+  seneca.act('d:1',{x:0}, seneca.util.print)
+  await seneca.ready()
+  console.dir(await seneca.post('sys:telemetry,get:msg',{pat:'d:1'}),{depth:null,breakLength:120}) 
 }
 
 

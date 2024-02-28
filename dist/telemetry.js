@@ -13,7 +13,7 @@ function preload(plugin) {
     const seneca = this;
     const root = seneca.root;
     const options = plugin.options;
-    const tdata = (_a = (_b = root.context)._sys_Telemetry) !== null && _a !== void 0 ? _a : (_b._sys_Telemetry = {
+    const tdata = (_a = (_b = root.context).$_sys_Telemetry) !== null && _a !== void 0 ? _a : (_b.$_sys_Telemetry = {
         active: options.active,
         msg: {},
         trace: {},
@@ -36,8 +36,8 @@ function preload(plugin) {
             msgm.c.push(when);
             let index = msgm.c.length - 1;
             msgm.m[index] = meta.mi;
-            (_c = (_j = meta.custom)._sys_Telemetry_index) !== null && _c !== void 0 ? _c : (_j._sys_Telemetry_index = {});
-            meta.custom._sys_Telemetry_index[meta.mi] = index;
+            (_c = (_j = meta.custom).$_sys_Telemetry_index) !== null && _c !== void 0 ? _c : (_j.$_sys_Telemetry_index = {});
+            meta.custom.$_sys_Telemetry_index[meta.mi] = index;
             const tracem = ((_d = (_k = tdata.trace)[_l = meta.tx]) !== null && _d !== void 0 ? _d : (_k[_l] = []));
             (_e = (_m = tdata.runs)[pat]) !== null && _e !== void 0 ? _e : (_m[pat] = {});
             const runsm = ((_f = (_o = tdata.runs[pat])[act]) !== null && _f !== void 0 ? _f : (_o[act] = []));
@@ -58,7 +58,8 @@ function preload(plugin) {
             const pat = actdef.pattern;
             const act = actdef.id;
             const msgm = (_a = tdata.msg[pat]) === null || _a === void 0 ? void 0 : _a[act];
-            const index = (_b = meta.custom) === null || _b === void 0 ? void 0 : _b._sys_Telemetry_index[meta.mi];
+            const sys_Telemetry_index = (_b = meta.custom) === null || _b === void 0 ? void 0 : _b.$_sys_Telemetry_index;
+            const index = sys_Telemetry_index ? sys_Telemetry_index[meta.mi] : null;
             if (msgm && null != index) {
                 msgm.d[index] = Date.now() - msgm.c[index];
             }
@@ -69,14 +70,14 @@ function preload(plugin) {
         }
     }, { before: 'make_error' });
 }
-function Telemetry(options) {
+function Telemetry(_options) {
     let seneca = this;
     const root = seneca.root;
-    const tdata = root.context._sys_Telemetry;
+    const tdata = root.context.$_sys_Telemetry;
     seneca
         .fix('sys:telemetry')
         .message('set:active', { active: Boolean }, async function setActive(msg) {
-        const tdata = root.context._sys_Telemetry;
+        const tdata = root.context.$_sys_Telemetry;
         tdata.active = msg.active;
     })
         .message('get:msg', { pat: String }, async function getMsg(msg) {
