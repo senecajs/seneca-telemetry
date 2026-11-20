@@ -8,7 +8,6 @@ run()
 async function run() {
   const seneca = await Seneca({legacy:false})
 	.test()
-	.use('promisify')
 	.use(Telemetry,{
 	  active: true
 	})

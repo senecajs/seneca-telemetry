@@ -3,8 +3,6 @@
 
 const { Stats } = require('fast-stats')
 
-// import { Open } from 'gubu'
-
 
 // TODO: separate out errored messages
 
@@ -39,7 +37,10 @@ function preload(this: any, plugin: any) {
   }
 
 
-  root.order.inward.add((spec: any) => {
+  // The hooks are appended to the end of each pipeline, so they run after
+  // inward_announce and after outward_act_error. The outward hook reads
+  // meta.error, which is set before the outward pipeline runs.
+  root.order.inward.add(function telemetry_inward(spec: any) {
     if (!tdata.active) return null
 
     const actdef = spec.ctx.actdef
@@ -68,10 +69,10 @@ function preload(this: any, plugin: any) {
 
       // console.log('IN', pat, meta.custom)
     }
-  }, { after: 'announce' })
+  })
 
 
-  root.order.outward.add((spec: any) => {
+  root.order.outward.add(function telemetry_outward(spec: any) {
     if (!tdata.active) return null
 
     const actdef = spec.ctx.actdef
@@ -95,7 +96,7 @@ function preload(this: any, plugin: any) {
         tracem.push({ k: 2, m: meta.mi, p: pat, a: act, t: when, e: meta.error ? 1 : 0 })
       }
     }
-  }, { before: 'make_error' })
+  })
 
 }
 
@@ -120,7 +121,7 @@ function Telemetry(this: any, _options: Options) {
         msg: tdata.msg[msg.pat],
 
         aggd: Object
-          .entries(tdata.msg[msg.pat])
+          .entries(tdata.msg[msg.pat] || {})
           .map((n: any[]) => (n[1] = n[1].d, n))
           .reduce((g: any, a: any[]) =>
             ((g[a[0]] = stats(a[1])), g),
