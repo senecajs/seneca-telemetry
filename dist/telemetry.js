@@ -19,7 +19,10 @@ function preload(plugin) {
         trace: {},
         runs: {},
     });
-    root.order.inward.add((spec) => {
+    // The hooks are appended to the end of each pipeline, so they run after
+    // inward_announce and after outward_act_error. The outward hook reads
+    // meta.error, which is set before the outward pipeline runs.
+    root.order.inward.add(function telemetry_inward(spec) {
         var _a, _b, _c, _d, _e, _f;
         var _g, _h, _j, _k, _l, _m, _o;
         if (!tdata.active)
@@ -45,8 +48,8 @@ function preload(plugin) {
             runsm.push(meta.tx);
             // console.log('IN', pat, meta.custom)
         }
-    }, { after: 'announce' });
-    root.order.outward.add((spec) => {
+    });
+    root.order.outward.add(function telemetry_outward(spec) {
         var _a, _b;
         if (!tdata.active)
             return null;
@@ -68,7 +71,7 @@ function preload(plugin) {
                 tracem.push({ k: 2, m: meta.mi, p: pat, a: act, t: when, e: meta.error ? 1 : 0 });
             }
         }
-    }, { before: 'make_error' });
+    });
 }
 function Telemetry(_options) {
     let seneca = this;
@@ -85,7 +88,7 @@ function Telemetry(_options) {
             pat: msg.pat,
             msg: tdata.msg[msg.pat],
             aggd: Object
-                .entries(tdata.msg[msg.pat])
+                .entries(tdata.msg[msg.pat] || {})
                 .map((n) => (n[1] = n[1].d, n))
                 .reduce((g, a) => ((g[a[0]] = stats(a[1])), g), {}),
             trace: Object

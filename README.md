@@ -13,16 +13,33 @@
 
 ## Install
 
+Requires Seneca 4 and Node.js 24 or later.
+
 ```sh
-npm install @seneca/telemetry
+npm install seneca@^4 @seneca/telemetry
 ```
 
 ## Quick Example
 
 ```js
-require('seneca')()
-  .use('@seneca/telemetry')
+const seneca = require('seneca')()
+  .use('@seneca/telemetry', { active: true })
+
+// ... act some messages, then:
+const out = await seneca.post('sys:telemetry,get:msg', { pat: 'a:1' })
 ```
+
+## Messages
+
+* `sys:telemetry,set:active` with `active` (a boolean): switch recording
+  on or off. The option `active` (default `false`) sets the initial state.
+* `sys:telemetry,get:msg` with `pat` (a pattern string such as `a:1`): the
+  recorded calls of each action of that pattern (`msg`: call times `c`,
+  durations `d` in milliseconds, message ids `m`), duration statistics per
+  action (`aggd`: mean `mn`, median `md`, lowest `lo`, highest `hi`), and
+  the trace of each transaction that called it (`trace`, entries with
+  `k: 1` for the start and `k: 2` for the end of a call, and `e: 1` when
+  the call failed).
 
 ## More Examples
 
